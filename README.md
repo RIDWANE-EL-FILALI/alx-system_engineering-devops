@@ -1,1 +1,1 @@
-# shell navigation!
+# shell navigation and permissions !
