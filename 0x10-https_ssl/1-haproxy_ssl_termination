@@ -38,7 +38,7 @@ frontend www-http
     http-request set-header X-Forwarded-Proto http
     default_backend www-backend
 frontend www-https
-    bind   0.0.0.0:443 ssl crt /etc/haproxy/certs/www.thepadj.tech.pem
+    bind   0.0.0.0:443 ssl crt /etc/letsencrypt/live/www.broly.tech/fullchain.pem
     http-request set-header X-Forwarded-Proto https
     acl    letsencrypt-acl path_beg /.well-known/acme-challenge/
     use_backend letsencrypt-backend if letsencrypt-acl
@@ -47,8 +47,8 @@ frontend www-https
 backend www-backend
     balance  roundrobin
     redirect scheme https if !{ ssl_fc }
-    server 1733-web-01 3.235.21.36:80 check
-    server 1733-web-02 34.139.50.126:80 check
+    server 330925-web-01 100.25.142.160:80 check
+    server 330925-web-02 54.144.157.246:80 check
 
 backend letsencrypt-backend
     server letsencrypt 127.0.0.1:54321
