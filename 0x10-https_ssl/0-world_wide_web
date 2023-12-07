@@ -1,4 +1,4 @@
-i#!/bin/bash
+#!/usr/bin/env bash
 # Display information about subdomains
 
 function audit_subdomain {
@@ -12,17 +12,10 @@ function audit_subdomain {
     fi
 
     for sub in "${subdomains[@]}"; do
-        result=$(dig +short "$sub.$domain" | head -n1)
-
-        if [ -z "$result" ]; then
-            echo "The subdomain $sub does not exist for domain $domain"
-        else
-            record_type=$(dig +short -t "$sub.$domain" | awk -F '\t' '{print $2}')
-            destination=$(dig +short "$sub.$domain")
-            echo "The subdomain $sub is a $record_type record and points to $destination"
-        fi
+        record_type=$(dig "$sub.$domain" | awk '/ANSWER SECTION/ { getline; print $4}')
+        destination=$(dig "$sub.$domain" | awk '/ANSWER SECTION/ { getline; print $5}')
+        echo "The subdomain $sub is a $record_type record and points to $destination"
     done
 }
 
 audit_subdomain "$1" "$2"
-
